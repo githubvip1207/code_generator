@@ -28,7 +28,7 @@ USERPATH=$(pwd)
 ENVIRONMENT=~/.dcg
 ENV_TEMPS=${ENVIRONMENT}/templates
 ENV_GIT_HOUSE=${ENVIRONMENT}/.gitresources
-GIT_BASE_URL="http://git.domob-inc.cn/zhengfei/dmcodegenerator.git"
+GIT_BASE_URL="https://github.com/githubvip1207/code_generator.git"
 
 # 代码执行结果状态判断
 # $1 必须是$?
