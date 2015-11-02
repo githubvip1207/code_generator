@@ -1,0 +1,9 @@
+*.py[cod]
+*.swp
+*.log
+*.pid
+*.out
+*.err
+*.data
+log
+target
