@@ -1,6 +1,6 @@
 #!/bin/bash
 #########################################################################
-# Author: (zhengfei@domob.cn)
+# Author: (zfly1207@126.com)
 # Created Time: 2015-01-12 18:56:21
 # File Name: dcg.sh
 # Description: 
@@ -14,7 +14,7 @@ LANGUAGE_MODEL_SUPPORT['Python']="1.simple"
 #LANGUAGE_MODEL_SUPPORT['PHP']="1.ccc 2.ddd 3.iii"
 #LANGUAGE_MODEL_SUPPORT['Golang']="1.aaa 2.sss"
 
-DEVELOPER="zhengfei@domob.cn"
+DEVELOPER="zfly1207@126.com"
 DATETIME=$(date '+%Y-%m-%d %H:%M:%S')
 
 PROJECT_LANG=""
