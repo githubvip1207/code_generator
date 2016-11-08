@@ -9,7 +9,7 @@ import logging.config
 
 _conn_map = {}
 
-_logger = logging.getLogger()
+_logger = logging.getLogger('domob.mysql_util')
 
 class MySQLConn:
 	def __init__(self, host, port, user, passwd, db, pretreatment = False, conn_num_max = 8):
@@ -178,7 +178,7 @@ def execute_t(_conn, sql, parameters=None):
 
 if __name__ == '__main__':
 	logging.basicConfig(level=logging.DEBUG)
-	registerConnection('test','192.168.1.1', 3306, 'username', 'passwd', 'test')
+	registerConnection('test','192.168.1.200', 3306, 'domob', 'domob', 'test')
 	print fetchall('test', 'show tables')
 	tables = fetchall('test', 'show tables like %s', ('%a%',))
 	print tables

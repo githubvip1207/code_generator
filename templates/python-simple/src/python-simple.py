@@ -16,7 +16,7 @@ import argparse
 import setproctitle
 import ConfigParser
 import logging.config
-#import multiprocessing
+import multiprocessing
 import django
 
 # 获取默认的运行时路径，并设置运行时需要加到sys.path的模块
@@ -35,6 +35,7 @@ class __PROJECTNAME_CLASS__(object):
 		self.executeDir = Cnf.basic['execute_dir']
 		self.running = False
 		self.initSignalHandler()
+		self.queue = multiprocessing.Queue(3)
 
 		Util.setCnf(Cnf)
 		setproctitle.setproctitle('__PROJECTNAME__: master process')
@@ -56,13 +57,12 @@ class __PROJECTNAME_CLASS__(object):
 		self.logger.info('Try to stop all workers.')
 		self.stop()
 		self.logger.info('Bye-bye.')
-		sys.exit(0)
 
 	def run(self):
 		self.logger.info('__PROJECTNAME__ service starts to run.')
-		self.running = True
 		# 方案一，轮训任务
 		'''
+		self.running = True
 		while self.running:
 			self.logger.info('I\'m running')
 			# 使用django连接数据库,所以这里废弃
@@ -72,23 +72,47 @@ class __PROJECTNAME_CLASS__(object):
 		'''
 		# 方案二、多进程任务
 		'''
-		from src.model1 import Model1 
-		self.model1_processor = Model1()
-		model1_thread = multiprocessing.Process(target = self.model1_processor.run, args = ())
-		model1_thread.daemon = True
-		model1_thread.start()
+		self.processList = []
 
-		# join
-		model1_thread.join()
+		from src.model1 import Model1 
+		model1 = Model1()
+		model1_thread = multiprocessing.Process(target = model1.run, args = (self.queue,))
+		model1_thread.daemon = False  # 设置为false，主进程运行完毕后会挂起等待. 派生进程退出后再退出；在python2.7.1版本，如果派生进程个数为1，主进程也不会等待
+		model1_thread.start()
+		self.processList.append(model1_thread)
+
+		```
+		model example: 
+		class Model1(object):
+			def __init__(self):
+				self.__running = True
+
+			def listener(self):
+				while self.__running:
+					if self.queue.get() == 'stop':
+						self.__running = False
+						self.logger.info('__PROJECTNAME__.model1 will stop. please wait...')
+					time.sleep(1)
+
+			def run(self, queue):
+				self.queue = queue
+				t = threading.Thread(target = self.listener, args = ())
+				t.start()
+				......
+		```
 		'''
 
 	def stop(self):
 		self.logger.info('__PROJECTNAME__ service will stop.')
-		# 方案二需要开启
-		'''
-		self.model1_processor.stop()
+		# 方案一需要开启
 		'''
 		self.running = False	
+		'''
+		# 方案二需要开启
+		'''
+		for k in self.processList:
+			self.queue.put('stop')
+		'''
 
 
 if __name__ == '__main__':

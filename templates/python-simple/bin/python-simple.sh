@@ -28,13 +28,13 @@ if [ ! -d "$EXECUTEDIR"/conf ]; then
     exit
 fi
 
-if [ ! -d "$EXECUTEDIR"/log ]; then
-    mkdir "$EXECUTEDIR"/log
+if [ ! -d "$EXECUTEDIR"/logs ]; then
+    mkdir "$EXECUTEDIR"/logs
 fi
 
 cd "$EXECUTEDIR"
 
-PID_FILE="$EXECUTEDIR"/log/"$NAME".pid
+PID_FILE="$EXECUTEDIR"/logs/"$NAME".pid
 
 check_pid() {
     RETVAL=1
@@ -61,9 +61,9 @@ check_running() {
 start() {
     check_running
     echo "starting $CMD ..."
-    nohup /usr/local/bin/python "$BASEDIR"/src/"$CMD" -d "$EXECUTEDIR" 2> "$EXECUTEDIR"/log/"$NAME".err > "$EXECUTEDIR"/log/"$NAME".out &
+    nohup /usr/local/bin/python "$BASEDIR"/src/"$CMD" -d "$EXECUTEDIR" 2> "$EXECUTEDIR"/logs/"$NAME".err > "$EXECUTEDIR"/logs/"$NAME".out &
     PID=$!
-    echo $PID > "$EXECUTEDIR"/log/"$NAME".pid
+    echo $PID > "$EXECUTEDIR"/logs/"$NAME".pid
     sleep 1
 }
 
