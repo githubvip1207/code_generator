@@ -6,11 +6,11 @@
 # Description: 
 #########################################################################
 
-VERSION=0.0.1
+VERSION=0.1.0
 
 declare -A LANGUAGE_MODEL_SUPPORT
 LANGUAGE_SUPPORT="1.Python"
-LANGUAGE_MODEL_SUPPORT['Python']="1.simple"
+LANGUAGE_MODEL_SUPPORT['Python']="1.simple 2.multiprocess"
 #LANGUAGE_MODEL_SUPPORT['PHP']="1.ccc 2.ddd 3.iii"
 #LANGUAGE_MODEL_SUPPORT['Golang']="1.aaa 2.sss"
 
