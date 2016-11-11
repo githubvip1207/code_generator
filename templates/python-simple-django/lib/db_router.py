@@ -3,15 +3,22 @@
 # Author: __AUTHOR__
 #########################################################################
 # Created Time: __CREATE_DATETIME__ 
-# File Name: shared_storage.py
+# File Name: DBRouter.py
 # Description: 
 #########################################################################
 
-class SharedStorage(object):
+class DBRouter(object):
 
-	def __init__(self):
-		pass
+	def db_for_read(self, model, **hints):
+		return 'slave'
 
-sharedStorage = SharedStorage()
+	def db_for_write(self, model, **hints):
+		return 'default'
+
+	def allow_relation(self, obj1, obj2, **hints):
+		return None
+
+	def allow_syncdb(self, db, model):
+		return None
 
 # vim: set noexpandtab ts=4 sts=4 sw=4 :
