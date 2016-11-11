@@ -15,32 +15,28 @@ import logging
 basePath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(basePath)
 
-from lib import mysql_util as MU
+from lib import torndb
+from lib.config_handle import cnf as Cnf
 
 
 class Util:
 
 	def __init__(self):
 		self.logger = logging.getLogger()
-		self.cnf = None
-		self.conn = None
-
-	def setCnf(self, cnf):
-		self.cnf = cnf 
+		self.db = None
 
 	def connectDb(self):
-		self.closeDb()
-		self.conn = MU.registerConnection('root',
-			self.cnf.database['host'],
-			self.cnf.database['port'],
-			self.cnf.database['user'],
-			self.cnf.database['pawd'],
-			self.cnf.database['name']
+		self.db = torndb.Connection(
+			host = '%s:%s' % (Cnf.database_master['host'], 
+				Cnf.database_master['port']),
+			database = Cnf.database_master['name'],
+			user = Cnf.database_master['user'],
+			password = Cnf.database_master['pawd']
 			)
 
 	def closeDb(self):
 		try:
-			MU.closeConnection('root', self.conn)
+			self.db.close()
 		except Exception, e:
 			pass
 

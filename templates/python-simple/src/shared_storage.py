@@ -7,11 +7,11 @@
 # Description: 
 #########################################################################
 
-class Shared_storage(object):
+class SharedStorage(object):
 
 	def __init__(self):
 		pass
 
-sharedStorage = Shared_storage()
+sharedStorage = SharedStorage()
 
 # vim: set noexpandtab ts=4 sts=4 sw=4 :

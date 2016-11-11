@@ -14,9 +14,7 @@ import signal
 import logging
 import argparse
 import setproctitle
-import ConfigParser
 import logging.config
-import django
 
 # 获取默认的运行时路径，并设置运行时需要加到sys.path的模块
 basePath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -32,10 +30,9 @@ class __PROJECTNAME_CLASS__(object):
 		# 正常的运行时日志Logger
 		self.logger = logging.getLogger()
 		self.executeDir = Cnf.basic['execute_dir']
+		self.loopInterval = int(Cnf.basic['loop_interval'])
 		self.running = False
 		self.initSignalHandler()
-
-		Util.setCnf(Cnf)
 		setproctitle.setproctitle('__PROJECTNAME__: master process')
 
 	# 删除不需要处理的信号，以及增加需要处理的信号
@@ -59,10 +56,10 @@ class __PROJECTNAME_CLASS__(object):
 	def run(self):
 		self.logger.info('__PROJECTNAME__ service starts to run.')
 		self.running = True
+		Util.connectDb()
 		while self.running:
 			self.logger.info('I\'m running')
-			# 使用django连接数据库,所以这里废弃
-			# Util.connectDb()
+			Util.db.reconnect()
 			# do something as your wish
 			time.sleep(Cnf.basic['interval'])
 
@@ -86,8 +83,6 @@ if __name__ == '__main__':
 	logging.config.fileConfig(os.path.join(args.executeDir, 'conf/__PROJECTNAME___logging.cfg'))
 	# __PROJECTNAME__ service config
 	print 'Load __PROJECTNAME__ service config...'
-	#cfg = ConfigParser.RawConfigParser()
-	#cfg.read(os.path.join(args.executeDir, 'conf/__PROJECTNAME___config.cfg'))
 	Cnf.reload(os.path.join(args.executeDir, 'conf/__PROJECTNAME___config.cfg'))
 	Cnf.basic['execute_dir'] = args.executeDir
 

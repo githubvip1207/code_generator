@@ -29,14 +29,6 @@ class __PROJECTNAME_CLASS___config(object):
 			'pawd' : self.__cfg_parser.get('database_master', 'pawd'),
 		}
 
-		self.database_slave = {
-			'host' : self.__cfg_parser.get('database_slave', 'host'),
-			'port' : self.__cfg_parser.getint('database_slave', 'port'),
-			'name' : self.__cfg_parser.get('database_slave', 'name'),
-			'user' : self.__cfg_parser.get('database_slave', 'user'),
-			'pawd' : self.__cfg_parser.get('database_slave', 'pawd'),
-		}
-
 cnf = __PROJECTNAME_CLASS___config()
 
 # vim: set noexpandtab ts=4 sts=4 sw=4 :
