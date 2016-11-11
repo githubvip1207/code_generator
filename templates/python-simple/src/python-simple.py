@@ -21,7 +21,7 @@ basePath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(basePath)
 
 from lib.util import util as Util
-from conf.__PROJECTNAME___config import cnf  as Cnf
+from lib.config_handle import cnf as Cnf
 
 
 class __PROJECTNAME_CLASS__(object):
@@ -61,7 +61,7 @@ class __PROJECTNAME_CLASS__(object):
 			self.logger.info('I\'m running')
 			Util.db.reconnect()
 			# do something as your wish
-			time.sleep(Cnf.basic['interval'])
+			time.sleep(self.loopInterval)
 
 	def stop(self):
 		self.logger.info('__PROJECTNAME__ service will stop.')
