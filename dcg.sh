@@ -118,7 +118,7 @@ function constructTemps(){
 	else
 		cd ${ENV_GIT_HOUSE} && git pull
 	fi
-	rm -rf ${ENV_TEMPS} && cp -r ${ENV_GIT_HOUSE}/templates/* ${ENV_TEMPS}/
+	rm -rf ${ENV_TEMPS}/* && cp -r ${ENV_GIT_HOUSE}/templates/* ${ENV_TEMPS}/
 	pecho "-> Done."
 }
 

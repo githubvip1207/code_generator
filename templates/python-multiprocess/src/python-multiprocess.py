@@ -14,17 +14,15 @@ import signal
 import logging
 import argparse
 import setproctitle
-import ConfigParser
 import logging.config
 import multiprocessing
-import django
 
 # 获取默认的运行时路径，并设置运行时需要加到sys.path的模块
 basePath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(basePath)
 
 from lib.util import util as Util
-from conf.__PROJECTNAME___config import cnf  as Cnf
+from lib.config_handle import cnf as Cnf
 
 
 class __PROJECTNAME_CLASS__(object):
@@ -36,8 +34,6 @@ class __PROJECTNAME_CLASS__(object):
 		self.running = False
 		self.initSignalHandler()
 		self.queue = multiprocessing.Queue(3)
-
-		Util.setCnf(Cnf)
 		setproctitle.setproctitle('__PROJECTNAME__: master process')
 
 	# 删除不需要处理的信号，以及增加需要处理的信号
@@ -64,36 +60,16 @@ class __PROJECTNAME_CLASS__(object):
 
 		from src.model1 import Model1 
 		model1 = Model1()
-		model1_thread = multiprocessing.Process(target = model1.run, args = (self.queue,))
+		model1_thread = multiprocessing.Process(target = model1.startup, args = (self.queue,))
 		model1_thread.daemon = False  # 设置为false，主进程运行完毕后会挂起等待. 派生进程退出后再退出；在python2.7.1版本，如果派生进程个数为1，主进程也不会等待
 		model1_thread.start()
 		self.processList.append(model1_thread)
 
-		```
-		model example: 
-		class Model1(object):
-			def __init__(self):
-				self.__running = True
-
-			def listener(self):
-				while self.__running:
-					if self.queue.get() == 'stop':
-						self.__running = False
-						self.logger.info('__PROJECTNAME__.model1 will stop. please wait...')
-					time.sleep(1)
-
-			def run(self, queue):
-				self.queue = queue
-				t = threading.Thread(target = self.listener, args = ())
-				t.start()
-				......
-		```
 
 	def stop(self):
 		self.logger.info('__PROJECTNAME__ service will stop.')
 		for k in self.processList:
 			self.queue.put('stop')
-
 
 if __name__ == '__main__':
 	# 命令行参数解析，默认解析'-d'，即指定该模块的运行时目录
@@ -111,8 +87,6 @@ if __name__ == '__main__':
 	logging.config.fileConfig(os.path.join(args.executeDir, 'conf/__PROJECTNAME___logging.cfg'))
 	# __PROJECTNAME__ service config
 	print 'Load __PROJECTNAME__ service config...'
-	#cfg = ConfigParser.RawConfigParser()
-	#cfg.read(os.path.join(args.executeDir, 'conf/__PROJECTNAME___config.cfg'))
 	Cnf.reload(os.path.join(args.executeDir, 'conf/__PROJECTNAME___config.cfg'))
 	Cnf.basic['execute_dir'] = args.executeDir
 
