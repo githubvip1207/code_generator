@@ -14,6 +14,7 @@ import sys
 import json
 import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "conf.django_settings")
+# 不同版本的django可能不一定需要setup
 django.setup()
 
 from django.db import models

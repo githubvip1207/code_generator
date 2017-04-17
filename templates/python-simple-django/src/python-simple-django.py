@@ -16,7 +16,6 @@ import argparse
 import setproctitle
 import logging.config
 import django
-from django.db import models
 
 # 获取默认的运行时路径，并设置运行时需要加到sys.path的模块
 basePath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,7 +23,7 @@ sys.path.append(basePath)
 
 from lib.util import util as Util
 from lib.config_handle import cnf as Cnf
-from lib.models import *
+# from lib.models import *
 
 
 class __PROJECTNAME_CLASS__(object):
