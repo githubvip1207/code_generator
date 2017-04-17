@@ -58,6 +58,7 @@ class __PROJECTNAME_CLASS__(object):
 	def run(self):
 		self.logger.info('__PROJECTNAME__ service starts to run.')
 		self.running = True
+                from lib import models 
 		while self.running:
 			self.logger.info('I\'m running')
 			django.db.close_old_connections()
